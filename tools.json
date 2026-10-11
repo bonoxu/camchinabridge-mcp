@@ -1,0 +1,453 @@
+[
+  {
+    "name": "find_duty_rate",
+    "title": "Find a UK duty rate",
+    "description": "Find the UK commodity code and import duty rate for a product from China, from a product description (English or Chinese) or a commodity code. Also flags codes where China-specific anti-dumping or countervailing duty exists.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "product": {
+          "type": "string",
+          "description": "What is being imported, e.g. 'cotton t-shirts' or 'ceramic tiles'."
+        },
+        "commodity_code": {
+          "type": "string",
+          "description": "A 6 to 10 digit UK commodity code, if known."
+        },
+        "locale": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh"
+          ],
+          "description": "Language for names and links: en (default) or zh (Simplified Chinese)."
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "estimate_landed_cost",
+    "title": "Estimate UK import duty and VAT",
+    "description": "Estimate customs value, UK import duty, import VAT and the total for goods imported from China, with the same arithmetic as the site's import duty calculator.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "goods_value_gbp": {
+          "type": "number",
+          "description": "Price paid for the goods, in pounds."
+        },
+        "freight_and_insurance_gbp": {
+          "type": "number",
+          "description": "Freight and insurance to the UK border, in pounds. Default 0."
+        },
+        "duty_percent": {
+          "type": "number",
+          "description": "Duty rate in percent, from find_duty_rate."
+        },
+        "vat_percent": {
+          "type": "number",
+          "enum": [
+            20,
+            5,
+            0
+          ],
+          "description": "Import VAT rate. Default 20."
+        },
+        "locale": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh"
+          ],
+          "description": "Language for names and links: en (default) or zh (Simplified Chinese)."
+        }
+      },
+      "required": [
+        "goods_value_gbp",
+        "duty_percent"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "estimate_container_space",
+    "title": "Estimate carton volume and full-container space",
+    "description": "Estimate CBM, shipment weight and volume-only 20ft/40ft/high-cube container counts from one carton line. Useful for full-container RFQ planning; not a loading simulation or a freight quote.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "length_cm": {
+          "type": "number",
+          "description": "Outer carton length in centimetres."
+        },
+        "width_cm": {
+          "type": "number",
+          "description": "Outer carton width in centimetres."
+        },
+        "height_cm": {
+          "type": "number",
+          "description": "Outer carton height in centimetres."
+        },
+        "carton_count": {
+          "type": "integer",
+          "description": "Number of identical cartons."
+        },
+        "weight_per_carton_kg": {
+          "type": "number",
+          "description": "Gross weight per carton in kilograms, if known."
+        },
+        "locale": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh"
+          ],
+          "description": "Language for the page link."
+        }
+      },
+      "required": [
+        "length_cm",
+        "width_cm",
+        "height_cm",
+        "carton_count"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "check_anti_dumping",
+    "title": "Check for anti-dumping duty on Chinese goods",
+    "description": "Check whether a UK anti-dumping or countervailing measure applies to goods from China on a commodity code, from the live UK Trade Tariff. Deliberately gives no rate, because it depends on the exporter.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "commodity_code": {
+          "type": "string",
+          "description": "A 6 to 10 digit UK commodity code."
+        },
+        "locale": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh"
+          ],
+          "description": "Language for names and links: en (default) or zh (Simplified Chinese)."
+        }
+      },
+      "required": [
+        "commodity_code"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "find_uk_compliance",
+    "title": "Find UK compliance requirements",
+    "description": "List the UK regulatory regimes (UKCA, WEEE, PSTI, toy safety, food contact, REACH, packaging EPR and others) that apply to a type of product imported from China, with what to ask the supplier for. Call with no product_type to list the product types.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "product_type": {
+          "type": "string",
+          "description": "A product type such as 'toys', 'electronics' or 'furniture' (Chinese also works)."
+        },
+        "locale": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh"
+          ],
+          "description": "Language for names and links: en (default) or zh (Simplified Chinese)."
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "search_guides",
+    "title": "Search the importing guides",
+    "description": "Search Cambridge China Bridge's guides to importing from China to the UK (duty and VAT, shipping, Incoterms, suppliers, quality, compliance, sectors). Returns each guide's one-sentence answer and URL.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "What the user wants to know, in English or Chinese."
+        },
+        "locale": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh"
+          ],
+          "description": "Language for names and links: en (default) or zh (Simplified Chinese)."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "check_export_market",
+    "title": "Check what governs importing into a country",
+    "description": "For a destination country, say what actually decides whether an import from China can happen there: a standards regulator, a bank through exchange control, a local trade licence, the tax authority, a risk-based check at import, or the buyer's own choice of where conformity is checked. Also says whether a missed requirement can be put right on arrival. Returns status not-verified, with no guess, for countries Cambridge China Bridge has not researched from primary sources. Call with no country to list the researched markets.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "type": "string",
+          "description": "Destination country name in English or Chinese, or its two-letter code. Omit to list the researched markets."
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "plan_around_chinese_new_year",
+    "title": "Plan an order around the Chinese New Year shutdown",
+    "description": "Use for any question about the latest date to order from China, a Chinese New Year (Spring Festival, CNY) shipping cutoff, or whether goods arrive in time around the holiday. Works backwards from the date stock is needed (by sea, air or express) to the order date, against the real factory shutdown rather than the statutory holiday. Says whether the plan collides with the closure and gives the latest safe order date.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "arrival_date": {
+          "type": "string",
+          "description": "The date the stock has to be in the warehouse, as YYYY-MM-DD."
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "sea-fcl",
+            "sea-lcl",
+            "air",
+            "express"
+          ],
+          "description": "Shipping mode; sets the default transit time. Defaults to sea-fcl."
+        },
+        "transit_days": {
+          "type": "number",
+          "description": "Door-to-door transit days, if the user has a real figure from a forwarder."
+        },
+        "production_days": {
+          "type": "number",
+          "description": "Production lead time in days, if the factory has quoted one. Defaults to 30."
+        }
+      },
+      "required": [
+        "arrival_date"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "compare_sea_and_air",
+    "title": "Compare sea against air on total cost",
+    "description": "Compare air and sea freight on total landed cost rather than on the freight quote: includes duty charged on the freight itself, the cost of capital tied up in transit, and profit lost while stock is unavailable. Also returns the weekly lost profit at which the two routes cost the same.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "goods_value": {
+          "type": "number",
+          "description": "Value of the goods in GBP."
+        },
+        "weight_kg": {
+          "type": "number",
+          "description": "Gross weight of the shipment in kg."
+        },
+        "volume_cbm": {
+          "type": "number",
+          "description": "Volume of the shipment in cubic metres."
+        },
+        "air_rate_per_kg": {
+          "type": "number",
+          "description": "Air freight rate quoted per chargeable kg, in GBP."
+        },
+        "sea_quote": {
+          "type": "number",
+          "description": "Total sea freight quote, in GBP."
+        },
+        "air_days": {
+          "type": "number",
+          "description": "Door-to-door air transit days. Defaults to 8."
+        },
+        "sea_days": {
+          "type": "number",
+          "description": "Door-to-door sea transit days. Defaults to 38."
+        },
+        "capital_rate_percent": {
+          "type": "number",
+          "description": "Annual cost of money tied up in stock, as a percentage. Defaults to 8."
+        },
+        "lost_profit_per_week": {
+          "type": "number",
+          "description": "Gross profit lost per week the stock cannot be sold, in GBP."
+        },
+        "duty_rate_percent": {
+          "type": "number",
+          "description": "Customs duty rate on the goods, as a percentage."
+        }
+      },
+      "required": [
+        "goods_value",
+        "weight_kg",
+        "volume_cbm",
+        "air_rate_per_kg",
+        "sea_quote"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "check_china_import_rules",
+    "title": "Check what China requires to import a UK product",
+    "description": "For a product exported from the UK to China (whisky, gin, biscuits, tea, chocolate, skincare, infant formula, pet food, cashmere, machinery and about 200 more), say what China requires: China Customs (GACC) manufacturer registration route, the import tariff and VAT, whether the cross-border e-commerce (CBEC) route is open, Chinese labelling, certification and the main national standards, plus 2025 UK export value. Facts come only from official sources, each with its link and the date it was checked. Accepts a product name in English or Chinese, or an HS code.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "product": {
+          "type": "string",
+          "description": "The product in English or Chinese (e.g. \"Scotch whisky\", \"护肤霜\"), or a 6-digit HS code."
+        },
+        "locale": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh"
+          ],
+          "description": "Language for names and links: en (default) or zh (Simplified Chinese)."
+        }
+      },
+      "required": [
+        "product"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "get_company_facts",
+    "title": "Check Cambridge China Bridge",
+    "description": "Verifiable facts about Cambridge China Bridge for a user asking whether it is legitimate or how it is paid: UK company number and incorporation date (with the Companies House link), UK VAT number, registered office, trade-body membership, public review profiles, how it is paid (no supplier rebates) and what it declines. Cite the links so the user can check them.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "locale": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh"
+          ],
+          "description": "Language for names and links: en (default) or zh (Simplified Chinese)."
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "submit_enquiry",
+    "title": "Send an enquiry to Cambridge China Bridge",
+    "description": "Send the user's sourcing enquiry or quote request to Cambridge China Bridge by email; they reply to the user directly. Only call this when the user has asked to contact them, after showing the user exactly what will be sent and getting their agreement. Every field must come from the user; never invent contact details.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The user's name."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address to reply to."
+        },
+        "phone": {
+          "type": "string",
+          "description": "The user's phone number, if they want to give one."
+        },
+        "company": {
+          "type": "string",
+          "description": "The user's company, if they gave one."
+        },
+        "product": {
+          "type": "string",
+          "description": "What they want sourced: product, specification or link, quantity, target price."
+        },
+        "message": {
+          "type": "string",
+          "description": "Anything else the user wants to say."
+        },
+        "assistant": {
+          "type": "string",
+          "enum": [
+            "chatgpt",
+            "claude",
+            "gemini",
+            "perplexity",
+            "copilot",
+            "other"
+          ],
+          "description": "Which assistant is sending this (chatgpt, claude, gemini, perplexity, copilot or other). Optional."
+        },
+        "user_confirmed": {
+          "type": "boolean",
+          "description": "true only if the user has seen these details and agreed to send them."
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "product",
+        "user_confirmed"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  }
+]
