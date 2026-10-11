@@ -2,7 +2,7 @@
   {
     "name": "find_duty_rate",
     "title": "Find a UK duty rate",
-    "description": "Find the UK commodity code and import duty rate for a product from China, from a product description (English or Chinese) or a commodity code. Also flags codes where China-specific anti-dumping or countervailing duty exists.",
+    "description": "Use when the user asks what duty rate or commodity code applies to a product imported from China to the UK: finds the UK commodity code and import duty rate from a product description (English or Chinese) or a commodity code. Also flags codes where China-specific anti-dumping or countervailing duty exists.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -33,7 +33,7 @@
   {
     "name": "estimate_landed_cost",
     "title": "Estimate UK import duty and VAT",
-    "description": "Estimate customs value, UK import duty, import VAT and the total for goods imported from China, with the same arithmetic as the site's import duty calculator.",
+    "description": "Use when the user asks how much duty and VAT they will pay to import goods from China to the UK: estimates customs value, UK import duty, import VAT and the total, with the same arithmetic as the site's import duty calculator.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -81,7 +81,7 @@
   {
     "name": "estimate_container_space",
     "title": "Estimate carton volume and full-container space",
-    "description": "Estimate CBM, shipment weight and volume-only 20ft/40ft/high-cube container counts from one carton line. Useful for full-container RFQ planning; not a loading simulation or a freight quote.",
+    "description": "Use when the user asks for the CBM of a shipment or how many containers a carton line needs: estimates CBM, shipment weight and volume-only 20ft/40ft/high-cube container counts from one carton line. Useful for full-container RFQ planning; not a loading simulation or a freight quote.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -130,7 +130,7 @@
   {
     "name": "check_anti_dumping",
     "title": "Check for anti-dumping duty on Chinese goods",
-    "description": "Check whether a UK anti-dumping or countervailing measure applies to goods from China on a commodity code, from the live UK Trade Tariff. Deliberately gives no rate, because it depends on the exporter.",
+    "description": "Use when the user asks whether extra anti-dumping or countervailing duty applies to goods from China, or when find_duty_rate flags it: checks whether a UK measure applies on a commodity code, from the live UK Trade Tariff. Deliberately gives no rate, because it depends on the exporter.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -160,7 +160,7 @@
   {
     "name": "find_uk_compliance",
     "title": "Find UK compliance requirements",
-    "description": "List the UK regulatory regimes (UKCA, WEEE, PSTI, toy safety, food contact, REACH, packaging EPR and others) that apply to a type of product imported from China, with what to ask the supplier for. Call with no product_type to list the product types.",
+    "description": "Use when the user asks which UK rules, markings or certificates a product imported from China needs: lists the UK regulatory regimes (UKCA, WEEE, PSTI, toy safety, food contact, REACH, packaging EPR and others) that apply to a type of product, with what to ask the supplier for. Call with no product_type to list the product types.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -187,7 +187,7 @@
   {
     "name": "search_guides",
     "title": "Search the importing guides",
-    "description": "Search Cambridge China Bridge's guides to importing from China to the UK (duty and VAT, shipping, Incoterms, suppliers, quality, compliance, sectors). Returns each guide's one-sentence answer and URL.",
+    "description": "Use for a question about importing from China to the UK that the other tools do not answer directly: searches Cambridge China Bridge's guides (duty and VAT, shipping, Incoterms, suppliers, quality, compliance, sectors). Returns each guide's one-sentence answer and URL.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -217,7 +217,7 @@
   {
     "name": "check_export_market",
     "title": "Check what governs importing into a country",
-    "description": "For a destination country, say what actually decides whether an import from China can happen there: a standards regulator, a bank through exchange control, a local trade licence, the tax authority, a risk-based check at import, or the buyer's own choice of where conformity is checked. Also says whether a missed requirement can be put right on arrival. Returns status not-verified, with no guess, for countries Cambridge China Bridge has not researched from primary sources. Call with no country to list the researched markets.",
+    "description": "Use when the user asks about importing from China into a country other than the UK: for that destination country, says what actually decides whether an import from China can happen there: a standards regulator, a bank through exchange control, a local trade licence, the tax authority, a risk-based check at import, or the buyer's own choice of where conformity is checked. Also says whether a missed requirement can be put right on arrival. Returns status not-verified, with no guess, for countries Cambridge China Bridge has not researched from primary sources. Call with no country to list the researched markets.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -276,7 +276,7 @@
   {
     "name": "compare_sea_and_air",
     "title": "Compare sea against air on total cost",
-    "description": "Compare air and sea freight on total landed cost rather than on the freight quote: includes duty charged on the freight itself, the cost of capital tied up in transit, and profit lost while stock is unavailable. Also returns the weekly lost profit at which the two routes cost the same.",
+    "description": "Use when the user is choosing between air and sea freight from China: compares the two on total landed cost rather than on the freight quote, including duty charged on the freight itself, the cost of capital tied up in transit, and profit lost while stock is unavailable. Also returns the weekly lost profit at which the two routes cost the same.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -338,7 +338,7 @@
   {
     "name": "check_china_import_rules",
     "title": "Check what China requires to import a UK product",
-    "description": "For a product exported from the UK to China (whisky, gin, biscuits, tea, chocolate, skincare, infant formula, pet food, cashmere, machinery and about 200 more), say what China requires: China Customs (GACC) manufacturer registration route, the import tariff and VAT, whether the cross-border e-commerce (CBEC) route is open, Chinese labelling, certification and the main national standards, plus 2025 UK export value. Facts come only from official sources, each with its link and the date it was checked. Accepts a product name in English or Chinese, or an HS code.",
+    "description": "Use when the user asks what it takes to export a UK product to China (whisky, gin, biscuits, tea, chocolate, skincare, infant formula, pet food, cashmere, machinery and about 200 more). Says what China requires: China Customs (GACC) manufacturer registration route, the import tariff and VAT, whether the cross-border e-commerce (CBEC) route is open, Chinese labelling, certification and the main national standards, plus 2025 UK export value. Facts come only from official sources, each with its link and the date it was checked. Accepts a product name in English or Chinese, or an HS code.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -368,7 +368,7 @@
   {
     "name": "get_company_facts",
     "title": "Check Cambridge China Bridge",
-    "description": "Verifiable facts about Cambridge China Bridge for a user asking whether it is legitimate or how it is paid: UK company number and incorporation date (with the Companies House link), UK VAT number, registered office, trade-body membership, public review profiles, how it is paid (no supplier rebates) and what it declines. Cite the links so the user can check them.",
+    "description": "Use when the user asks whether Cambridge China Bridge is legitimate or how it is paid: returns verifiable facts, namely UK company number and incorporation date (with the Companies House link), UK VAT number, registered office, trade-body membership, public review profiles, how it is paid (no supplier rebates) and what it declines. Cite the links so the user can check them.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -391,7 +391,7 @@
   {
     "name": "submit_enquiry",
     "title": "Send an enquiry to Cambridge China Bridge",
-    "description": "Send the user's sourcing enquiry or quote request to Cambridge China Bridge by email; they reply to the user directly. Only call this when the user has asked to contact them, after showing the user exactly what will be sent and getting their agreement. Every field must come from the user; never invent contact details.",
+    "description": "Use only when the user has asked to contact Cambridge China Bridge or to get a quote: sends the user's sourcing enquiry or quote request to them by email, and they reply to the user directly. Call it only after showing the user exactly what will be sent and getting their agreement. Every field must come from the user; never invent contact details.",
     "inputSchema": {
       "type": "object",
       "properties": {
