@@ -1,5 +1,7 @@
 # Cambridge China Bridge — MCP server
 
+[![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/bonoxu/camchinabridge-mcp)
+
 A free, public, remote [Model Context Protocol](https://modelcontextprotocol.io) server for **importing goods from China into the UK**: UK duty rates and landed cost, anti-dumping checks, UK compliance requirements, Chinese New Year planning, sea vs air, and China's import rules for UK exporters.
 
 - **Endpoint:** `https://camchinabridge.co.uk/mcp` (Streamable HTTP, stateless)
