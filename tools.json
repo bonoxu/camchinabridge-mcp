@@ -1,5 +1,100 @@
 [
   {
+    "name": "check_recall_causes",
+    "title": "Recall causes by category",
+    "description": "Top hazards, China-origin alert counts and share of published alerts by matching product category in UK OPSS and EU Safety Gate data windows, with supplier due-diligence questions and dated sources. Published alerts are not a product failure rate.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string",
+          "description": "Recall category or product keyword."
+        },
+        "product": {
+          "type": "string",
+          "description": "Product keyword, as an alternative to category."
+        },
+        "market": {
+          "type": "string",
+          "enum": [
+            "uk",
+            "eu",
+            "both"
+          ],
+          "default": "both"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "category"
+          ]
+        },
+        {
+          "required": [
+            "product"
+          ]
+        }
+      ]
+    },
+    "annotations": {
+      "title": "Recall causes by category",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "screen_supplier_name",
+    "title": "Supplier name screening",
+    "description": "Possible English or Chinese name matches against UK Sanctions List entities, CN/HK US Consolidated Screening List entities and UFLPA entities, with match type and dated sources. Automated name check, not legal advice; a match needs manual review; no match is not clearance.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "annotations": {
+      "title": "Supplier name screening",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "check_export_rebate_change",
+    "title": "Tracked export rebate changes",
+    "description": "Changes in tracked Chinese export rebate announcements covering an HS code prefix, with announcement number, effective date and previous and new percentages. This historical announcement lookup is not the current rate.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "hs_code": {
+          "type": "string",
+          "pattern": "^[0-9]{4,10}$"
+        }
+      },
+      "required": [
+        "hs_code"
+      ]
+    },
+    "annotations": {
+      "title": "Tracked export rebate changes",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "find_duty_rate",
     "title": "Find a UK duty rate",
     "description": "Use when the user asks what duty rate or commodity code applies to a product imported from China to the UK: finds the UK commodity code and import duty rate from a product description (English or Chinese) or a commodity code. Also flags codes where China-specific anti-dumping or countervailing duty exists.",
@@ -133,13 +228,25 @@
   {
     "name": "check_anti_dumping",
     "title": "Check for anti-dumping duty on Chinese goods",
-    "description": "Use when the user asks whether extra anti-dumping or countervailing duty applies to goods from China: checks whether a UK measure applies on a commodity code, from the live UK Trade Tariff. Deliberately gives no rate, because it depends on the exporter.",
+    "description": "Check Chinese goods for trade defence duties. market defaults to uk: uses the live UK Trade Tariff, with no single rate because it depends on the exporter. market eu: searches the sourced EU snapshot by product keyword or CN code prefix and gives indicative ranges and EUR-Lex regulations. Always check TARIC before EU import; no match is not clearance.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "commodity_code": {
           "type": "string",
-          "description": "A 6 to 10 digit UK commodity code."
+          "description": "UK: a 6 to 10 digit commodity code (required). EU: a CN code prefix; alternatively supply product."
+        },
+        "product": {
+          "type": "string",
+          "description": "EU only: product keyword in English or Chinese."
+        },
+        "market": {
+          "type": "string",
+          "enum": [
+            "uk",
+            "eu"
+          ],
+          "default": "uk"
         },
         "locale": {
           "type": "string",
@@ -150,8 +257,23 @@
           "description": "Language for names and links: en (default) or zh (Simplified Chinese)."
         }
       },
-      "required": [
-        "commodity_code"
+      "anyOf": [
+        {
+          "required": [
+            "commodity_code"
+          ]
+        },
+        {
+          "required": [
+            "market",
+            "product"
+          ],
+          "properties": {
+            "market": {
+              "const": "eu"
+            }
+          }
+        }
       ]
     },
     "annotations": {
@@ -445,6 +567,11 @@
         "company": {
           "type": "string",
           "description": "The user's company, if they gave one."
+        },
+        "source_page": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "The CCB page path the user was reading, if known. Path only, starting with /; no query or personal data."
         },
         "product": {
           "type": "string",
